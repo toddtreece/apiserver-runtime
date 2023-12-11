@@ -23,7 +23,6 @@ import (
 
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	labels "k8s.io/apimachinery/pkg/labels"
-	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
 	testing "k8s.io/client-go/testing"
@@ -35,9 +34,9 @@ type FakeFischers struct {
 	Fake *FakeWardleV1alpha1
 }
 
-var fischersResource = schema.GroupVersionResource{Group: "wardle.example.com", Version: "v1alpha1", Resource: "fischers"}
+var fischersResource = v1alpha1.SchemeGroupVersion.WithResource("fischers")
 
-var fischersKind = schema.GroupVersionKind{Group: "wardle.example.com", Version: "v1alpha1", Kind: "Fischer"}
+var fischersKind = v1alpha1.SchemeGroupVersion.WithKind("Fischer")
 
 // Get takes name of the fischer, and returns the corresponding fischer object, and an error if there is any.
 func (c *FakeFischers) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.Fischer, err error) {
@@ -99,7 +98,7 @@ func (c *FakeFischers) Update(ctx context.Context, fischer *v1alpha1.Fischer, op
 // Delete takes name of the fischer and deletes it. Returns an error if one occurs.
 func (c *FakeFischers) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
 	_, err := c.Fake.
-		Invokes(testing.NewRootDeleteAction(fischersResource, name), &v1alpha1.Fischer{})
+		Invokes(testing.NewRootDeleteActionWithOptions(fischersResource, name, opts), &v1alpha1.Fischer{})
 	return err
 }
 

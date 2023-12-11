@@ -23,7 +23,6 @@ import (
 
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	labels "k8s.io/apimachinery/pkg/labels"
-	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
 	testing "k8s.io/client-go/testing"
@@ -36,9 +35,9 @@ type FakeFlunders struct {
 	ns   string
 }
 
-var flundersResource = schema.GroupVersionResource{Group: "wardle.example.com", Version: "v1alpha1", Resource: "flunders"}
+var flundersResource = v1alpha1.SchemeGroupVersion.WithResource("flunders")
 
-var flundersKind = schema.GroupVersionKind{Group: "wardle.example.com", Version: "v1alpha1", Kind: "Flunder"}
+var flundersKind = v1alpha1.SchemeGroupVersion.WithKind("Flunder")
 
 // Get takes name of the flunder, and returns the corresponding flunder object, and an error if there is any.
 func (c *FakeFlunders) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.Flunder, err error) {
@@ -117,7 +116,7 @@ func (c *FakeFlunders) UpdateStatus(ctx context.Context, flunder *v1alpha1.Flund
 // Delete takes name of the flunder and deletes it. Returns an error if one occurs.
 func (c *FakeFlunders) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
 	_, err := c.Fake.
-		Invokes(testing.NewDeleteAction(flundersResource, c.ns, name), &v1alpha1.Flunder{})
+		Invokes(testing.NewDeleteActionWithOptions(flundersResource, c.ns, name, opts), &v1alpha1.Flunder{})
 
 	return err
 }

@@ -23,7 +23,6 @@ import (
 
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	labels "k8s.io/apimachinery/pkg/labels"
-	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
 	testing "k8s.io/client-go/testing"
@@ -36,9 +35,9 @@ type FakeFortunes struct {
 	ns   string
 }
 
-var fortunesResource = schema.GroupVersionResource{Group: "sample.k8s.com", Version: "v1alpha1", Resource: "fortunes"}
+var fortunesResource = v1alpha1.SchemeGroupVersion.WithResource("fortunes")
 
-var fortunesKind = schema.GroupVersionKind{Group: "sample.k8s.com", Version: "v1alpha1", Kind: "Fortune"}
+var fortunesKind = v1alpha1.SchemeGroupVersion.WithKind("Fortune")
 
 // Get takes name of the fortune, and returns the corresponding fortune object, and an error if there is any.
 func (c *FakeFortunes) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.Fortune, err error) {
