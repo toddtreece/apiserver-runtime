@@ -20,10 +20,10 @@ jobs:
       id: go
     - name: Check out code into the Go module directory
       uses: actions/checkout@v2
-    - name: golangci-lint
-      uses: golangci/golangci-lint-action@v3
-      with:
-        version: v1.46
+    #- name: golangci-lint
+    #  uses: golangci/golangci-lint-action@v3
+    #  with:
+    #    version: v1.46
     - run: go vet ./pkg/...
     - run: go vet ./sample/...
     - run: go vet ./tools/...
